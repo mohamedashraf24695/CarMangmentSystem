@@ -121,6 +121,49 @@ async function chargeTaker(plateNumber, time) {
   }
 }
 
+
+async function updateCardNo(plate_no , updated_no){
+
+
+ let check_existance_plate = await Card.exists({
+    plateNo: plate_no,
+  });
+
+  let check_existance_new = await Card.exists({
+    plateNo: updated_no,
+  });
+
+
+if (check_existance_plate && !check_existance_new){
+
+
+  let updatedCard = await Card.updateOne(
+    { plateNo: plate_no },
+    { $set: { plateNo: updated_no } }
+  );
+
+  return {message : "Card no is updated from " +plate_no + " to "+  updated_no} ;
+}else if (!check_existance_plate){
+  return {message : "Card is not exist"} ;
+
+
+} else if (check_existance_new){
+
+  return {message : "The new number is already exist"} ;
+
+}
+
+
+}
+
+
+
+
+
+
+
+
+
 module.exports = {
   createCard: createCard,
   findAllCards: findAllCards,
@@ -128,6 +171,6 @@ module.exports = {
   findCardsBy: findCardsBy,
   timeSinceLastTime: timeSinceLastTime,
   assignNewTime: assignNewTime,
-  chargeTaker,
-  chargeTaker,
+  chargeTaker :chargeTaker ,
+  updateCardNo:updateCardNo
 };

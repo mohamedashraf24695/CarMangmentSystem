@@ -101,12 +101,6 @@ let plate_id = req.params.plate_id ;
 let attribute = req.body.attribute ;
 let updatedItem = req.body.updatedItem;
 
-
-let result = carControllers.updateCarBy(attribute,plate_id,updatedItem) ;
-
-
-
-  
 try {
   let result = await carControllers.updateCarBy(attribute,plate_id,updatedItem) ;
    console.log(result);
@@ -121,13 +115,6 @@ try {
 
 
   });
-
-
-
-
-
-
-
 
 
 

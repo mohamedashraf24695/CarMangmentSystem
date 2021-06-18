@@ -1,4 +1,5 @@
 const Person = require("../models/Person");
+const carControllers = require("../controllers/carControllers");
 
 async function checkPerson(uniqueID) {
   try {
@@ -99,6 +100,9 @@ async function updatePeopleBy(attribute, unique_id, update) {
       },
       { $set: { name: update } }
     );
+
+    return { message: "Name is updated" };
+
   } else if (attribute == "position") {
     result = await Person.updateOne(
       {
@@ -106,6 +110,9 @@ async function updatePeopleBy(attribute, unique_id, update) {
       },
       { $set: { position: update } }
     );
+
+    return { message: "Position  is updated" };
+
   } else if (attribute == "age") {
     result = await Person.updateOne(
       {
@@ -113,17 +120,45 @@ async function updatePeopleBy(attribute, unique_id, update) {
       },
       { $set: { age: update } }
     );
+
+    return { message: "Age  is updated" };
+
   } else if (attribute == "uniqueID") {
-    result = await Person.updateOne(
-      {
-        uniqueID: unique_id,
-      },
-      { $set: { uniqueID: update } }
-    );
+    let idExistance = await Person.exists({
+      uniqueID: update,
+    });
+
+    if (idExistance){
+
+      return { message: "Unique ID is already exist" };
+
+
+    }else if (!idExistance){
+       await Person.updateOne(
+        {
+          uniqueID: unique_id,
+        },
+        { $set: { uniqueID: update } }
+      );
+  
+      let associatedCar = await carControllers.findCarsBy("ownerID",unique_id) ; 
+      console.log(associatedCar)
+      let plateNumber = await associatedCar[0].plateNo ;
+      console.log("Plate number is "+ plateNumber) ;
+      await carControllers.updateCarBy("ownerID",plateNumber,update) ;
+
+      return { message: "Unique ID is updated and the associated car owner number" };
+
+    }
+
+
+
+   
+
+
   }
 
   console.log(result);
-  return result;
 }
 
 module.exports = {

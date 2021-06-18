@@ -87,5 +87,28 @@ router.get("/read/:prop/:prop_id", async (req, res) => {
 });
 /******************************************************************************* */
 
+
+router.patch("/update/:plate_id", async (req, res) => {
+
+  let plate_id = req.params.plate_id ;
+  let updatedItem = req.body.updatedItem; 
+
+
+  try {
+    let result = await cardControllers.updateCardNo(plate_id,updatedItem);
+
+    console.log(result);
+     res.json(result)
+  
+  } catch (error) {
+    console.log(error);
+  res.json(error)
+  }
+ 
+})
+
+
+
+
 module.exports = router;
 /******************************************************************************* */

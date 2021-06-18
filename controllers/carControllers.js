@@ -1,5 +1,6 @@
 const Car = require("../models/Car");
 const Person = require("../models/Person");
+const cardControllers = require("../controllers/cardControllers");
 
 async function checkCar(plateNo, ownerID) {
   try {
@@ -124,8 +125,6 @@ async function findCarsBy(attribute, value) {
 }
 
 async function updateCarBy(attribute, plate_no, update) {
-  let result;
-
   let check_existance_plate = await Car.exists({
     plateNo: plate_no,
   });
@@ -141,42 +140,65 @@ async function updateCarBy(attribute, plate_no, update) {
       });
 
       if (check_existance_person && !check_existance_owner) {
-        // update
-        result = await Car.updateOne(
+        await Car.updateOne(
           {
             plateNo: plate_no,
           },
           { $set: { ownerID: update } }
         );
+
+        return { message: "Car is updated" };
+      } else {
+        if (!check_existance_person) {
+          return { message: "Owner is not an employee" };
+        } else if (check_existance_owner) {
+          return { message: "Owner own another car " };
+        }
       }
     } else if (attribute === "model") {
-      result = await Car.updateOne(
+      await Car.updateOne(
         {
           plateNo: plate_no,
         },
         { $set: { model: update } }
       );
+
+      return { message: "Car's model is updated " };
     } else if (attribute === "brand") {
-      result = await Car.updateOne(
+      await Car.updateOne(
         {
           plateNo: plate_no,
         },
         { $set: { brand: update } }
       );
-    } else if (attribute === "model") {
-      result = await Car.updateOne(
-        {
-          plateNo: plate_no,
-        },
-        { $set: { plateNo: update } }
-      );
+
+
+      return { message: "Car's brand is updated " };
+    } else if (attribute === "plateNo") {
+      let check_existance_new_plate = await Car.exists({
+        plateNo: update,
+      });
+
+      if (check_existance_new_plate) {
+        return {
+          message: "New Plate number is already exist for another can ",
+        };
+      } else if (!check_existance_new_plate) {
+        await Car.updateOne(
+          {
+            plateNo: plate_no,
+          },
+          { $set: { plateNo: update } }
+        );
+
+        await cardControllers.updateCardNo(plate_no,update);
+
+        return { message: "Car's plate number is updated and also the corresponding card" };
+      }
     }
-    return result ;
-
-  }else {
-    return "Car is not found"
+  } else {
+    return { message: "Car is not found" };
   }
-
 }
 
 module.exports = {

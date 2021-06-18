@@ -15,23 +15,24 @@ const personControllers = require("../controllers/personControllers");
  *     - uniqueID : type : Number , required
  **************************************************************************/
 
-
 router.post("/create", async (req, res) => {
-  
-    let name = req.body.name;
-    let position = req.body.position ;
-    let age = req.body.age;
-    let uniqueID =req.body.uniqueID;
-  
+  let name = req.body.name;
+  let position = req.body.position;
+  let age = req.body.age;
+  let uniqueID = req.body.uniqueID;
 
   try {
-    let result = await personControllers.createPerson(name,position,age,uniqueID);
+    let result = await personControllers.createPerson(
+      name,
+      position,
+      age,
+      uniqueID
+    );
     await console.log(result);
 
- res.status(200).json({
+    res.status(200).json({
       message: result,
     });
-
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -45,14 +46,14 @@ router.post("/create", async (req, res) => {
 
  **************************************************************************/
 
- router.get("/read/all", async (req, res) => {
-    try {
-      let result = await  personControllers.findAllPeople();
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  });
+router.get("/read/all", async (req, res) => {
+  try {
+    let result = await personControllers.findAllPeople();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 /****************************************************************************************************  */
 
@@ -70,90 +71,82 @@ router.post("/create", async (req, res) => {
 
  **************************************************************************/
 
- router.get("/read/:prop/:prop_id", async (req, res) => {
+router.get("/read/:prop/:prop_id", async (req, res) => {
   try {
     let result = await personControllers.checkExistance(
       req.params.prop,
       req.params.prop_id
-    ); 
+    );
 
     if (result) {
-
       let foundpeople = await personControllers.findPeopleBy(
         req.params.prop,
         req.params.prop_id
-      )
-      res.status(200).json({ message: "The person is exist" ,
-                              result : foundpeople });
+      );
+      res
+        .status(200)
+        .json({ message: "The person is exist", result: foundpeople });
     } else {
       res.status(200).json({ message: "The person is not found" });
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-  });
+});
 
+router.patch("/update/:unique_id", async (req, res) => {
+  try {
+    let result = await personControllers.checkExistance(
+      "uniqueID",
+      req.params.unique_id
+    );
 
-  
+    if (result) {
+      let updatedPerson = await personControllers.updatePeopleBy(
+        req.body.attribute,
+        req.params.unique_id,
+        req.body.updatedItem
+      );
 
-  router.patch("/update/:unique_id", async (req, res) => {
-    try {
-      let result = await personControllers.checkExistance(
-        "uniqueID",
-        req.params.unique_id
-      ); 
-  
-      if (result) {
+      console.log(updatedPerson);
 
-          let updatedPerson = await personControllers.updatePeopleBy(
-            req.body.attribute,
-            req.params.unique_id,
-            req.body.updatedItem 
-          ) ;
-
-          console.log(updatedPerson)
-
-        res.status(200).json({ message: "The person is updated" ,
-                                result : updatedPerson });
-      } else {
-        res.status(200).json({ message: "The person is not found" });
-      }
-    } catch (error) {
-      res.status(400).json({ message: error.message });
+      res
+        .status(200)
+        .json({ message: "The person is updated", result: updatedPerson });
+    } else {
+      res.status(200).json({ message: "The person is not found" });
     }
-    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
+router.patch("/update/:unique_id", async (req, res) => {
+  try {
+    let result = await personControllers.checkExistance(
+      "uniqueID",
+      req.params.unique_id
+    );
 
+    if (result) {
+      let updatedPerson = await personControllers.updatePeopleBy(
+        req.body.attribute,
+        req.params.unique_id,
+        req.body.updatedItem
+      );
 
- router.patch("/update/:unique_id", async (req, res) => {
-    try {
-      let result = await personControllers.checkExistance(
-        "uniqueID",
-        req.params.unique_id
-      ); 
-  
-      if (result) {
+      console.log(updatedPerson);
 
-          let updatedPerson = await personControllers.updatePeopleBy(
-            req.body.attribute,
-            req.params.unique_id,
-            req.body.updatedItem 
-          ) ;
-
-          console.log(updatedPerson)
-
-        res.status(200).json({ message: "The person is updated" ,
-                                result : updatedPerson });
-      } else {
-        res.status(200).json({ message: "The person is not found" });
-      }
-    } catch (error) {
-      res.status(400).json({ message: error.message });
+      res
+        .status(200)
+        .json({ message: "The person is updated", result: updatedPerson });
+    } else {
+      res.status(200).json({ message: "The person is not found" });
     }
-    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+    console.log(error);
+  }
+});
 
-
-
-
-  
 module.exports = router;
