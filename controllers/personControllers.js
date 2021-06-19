@@ -1,5 +1,6 @@
 const Person = require("../models/Person");
 const carControllers = require("../controllers/carControllers");
+const cardControllers = require("../controllers/cardControllers");
 
 async function checkPerson(uniqueID) {
   try {
@@ -167,11 +168,27 @@ async function deletePerson(unique_id) {
   }
 }
 
+
+async function deleteAll(){
+
+  await cardControllers.deleteAll();
+  await carControllers.deleteAll();
+
+  await Person.deleteMany();
+
+
+  return {message : "The people , cars and associated cards are deleted successfully " } ;
+
+
+}
+
+
 module.exports = {
   createPerson: createPerson,
   findAllPeople: findAllPeople,
   findPeopleBy: findPeopleBy,
   checkExistance: checkExistance,
   updatePeopleBy: updatePeopleBy,
-  deletePerson:deletePerson
+  deletePerson:deletePerson,
+  deleteAll:deleteAll
 };

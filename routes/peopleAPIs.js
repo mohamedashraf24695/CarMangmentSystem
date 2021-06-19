@@ -139,7 +139,19 @@ router.delete("/delete/:unique_id", async (req, res) => {
 
 
 
+router.delete("/deleteAll/", async (req, res) => {
 
+
+  try {
+    let result = await personControllers.deleteAll();
+
+     res.json(result)
+  
+  } catch (error) {
+  res.json(error)
+  }
+ 
+})
 
 
 

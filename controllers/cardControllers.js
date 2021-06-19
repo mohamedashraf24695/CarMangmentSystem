@@ -236,7 +236,7 @@ async function deleteAll(){
 
   await Card.deleteMany();
 
-  return {message : "The card is deleted successfully" } ;
+  return {message : "The cards are deleted successfully" } ;
 
 
 }

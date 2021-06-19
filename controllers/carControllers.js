@@ -291,6 +291,24 @@ async function deleteCar(plate_no) {
     return { message: "The card is not exist " };
   }
 }
+
+/************************************************************************************************************************************* */
+async function deleteAll(){
+
+  await cardControllers.deleteAll();
+  await Car.deleteMany();
+
+
+  return {message : "The cars and associated cards are deleted successfully " } ;
+
+
+}
+
+
+
+
+
+
 /********************************************************************************************************************************* */
 module.exports = {
   createCar: createCar,
@@ -299,5 +317,6 @@ module.exports = {
   findCarsBy: findCarsBy,
   updateCarBy: updateCarBy,
   deleteCar: deleteCar,
+  deleteAll:deleteAll
 };
 /********************************************************************************************************************************* */

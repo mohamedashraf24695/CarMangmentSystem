@@ -120,6 +120,19 @@ router.delete("/delete/:plate_id", async (req, res) => {
 
 
 
+router.delete("/deleteAll/", async (req, res) => {
+
+
+  try {
+    let result = await carControllers.deleteAll();
+
+     res.json(result)
+  
+  } catch (error) {
+  res.json(error)
+  }
+ 
+})
 
 /******************************************************************************* */
 

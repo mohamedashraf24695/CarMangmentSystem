@@ -120,12 +120,11 @@ router.delete("/delete/:plate_id", async (req, res) => {
 })
 
 
-router.delete("/delete/:plate_id", async (req, res) => {
+router.delete("/deleteAll/", async (req, res) => {
 
-  let plate_id = req.params.plate_id ;
 
   try {
-    let result = await cardControllers.deleteCard(plate_id);
+    let result = await cardControllers.deleteAll();
 
      res.json(result)
   
