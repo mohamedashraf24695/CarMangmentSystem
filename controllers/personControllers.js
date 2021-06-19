@@ -136,9 +136,7 @@ async function updatePeopleBy(attribute, unique_id, update) {
       );
 
       let associatedCar = await carControllers.findCarsBy("ownerID", unique_id);
-      console.log(associatedCar);
       let plateNumber = await associatedCar[0].plateNo;
-      console.log("Plate number is " + plateNumber);
       await carControllers.updateCarBy("ownerID", plateNumber, update);
 
       return {
@@ -147,7 +145,6 @@ async function updatePeopleBy(attribute, unique_id, update) {
     }
   }
 
-  console.log(result);
 }
 
 async function deletePerson(unique_id) {

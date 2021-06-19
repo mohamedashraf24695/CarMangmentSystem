@@ -22,7 +22,6 @@ router.post("/create", async (req, res) => {
 
   try {
     let result = await carControllers.createCar(brand, model, plateNo, ownerID);
-    await console.log(result);
     res.status(200).json({
       message: result,
     });
@@ -96,10 +95,8 @@ router.patch("/update/:plate_id", async (req, res) => {
       plate_id,
       updatedItem
     );
-    console.log(result);
     res.json(result);
   } catch (error) {
-    console.log(error);
     res.json(error);
   }
 });
@@ -113,11 +110,9 @@ router.delete("/delete/:plate_id", async (req, res) => {
   try {
     let result = await carControllers.deleteCar(plate_id);
 
-    console.log(result);
      res.json(result)
   
   } catch (error) {
-    console.log(error);
   res.json(error)
   }
  

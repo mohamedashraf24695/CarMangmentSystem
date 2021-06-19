@@ -21,7 +21,6 @@ router.post("/create", async (req, res) => {
 
   try {
     let result = await cardControllers.createCard(plateNo, ownerID);
-    await console.log(result);
     res.status(200).json({
       message: result,
     });
@@ -97,11 +96,9 @@ router.patch("/update/:plate_id", async (req, res) => {
   try {
     let result = await cardControllers.updateCardNo(plate_id,updatedItem);
 
-    console.log(result);
      res.json(result)
   
   } catch (error) {
-    console.log(error);
   res.json(error)
   }
  
@@ -115,11 +112,9 @@ router.delete("/delete/:plate_id", async (req, res) => {
   try {
     let result = await cardControllers.deleteCard(plate_id);
 
-    console.log(result);
      res.json(result)
   
   } catch (error) {
-    console.log(error);
   res.json(error)
   }
  

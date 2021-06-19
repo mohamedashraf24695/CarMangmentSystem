@@ -25,13 +25,11 @@ router.post("/", async (req, res) => {
       return;
     } else {
       let newCardResult = await cardControllers.createCard(plateNo, ownerID);
-      console.log(newCardResult);
       res.status(200).json({
         message: newCardResult,
       });
     }
   } catch (error) {
-    console.log(error);
     res.send(error);
   }
 });

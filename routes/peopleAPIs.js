@@ -28,7 +28,6 @@ router.post("/create", async (req, res) => {
       age,
       uniqueID
     );
-    await console.log(result);
 
     res.status(200).json({
       message: result,
@@ -108,7 +107,6 @@ router.patch("/update/:unique_id", async (req, res) => {
         req.body.updatedItem
       );
 
-      console.log(updatedPerson);
 
       res
         .status(200)
@@ -135,7 +133,6 @@ router.patch("/update/:unique_id", async (req, res) => {
         req.body.updatedItem
       );
 
-      console.log(updatedPerson);
 
       res
         .status(200)
@@ -145,7 +142,6 @@ router.patch("/update/:unique_id", async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
-    console.log(error);
   }
 });
 
@@ -158,11 +154,9 @@ router.delete("/delete/:unique_id", async (req, res) => {
   try {
     let result = await personControllers.deletePerson(unique_id);
 
-    console.log(result);
      res.json(result)
   
   } catch (error) {
-    console.log(error);
   res.json(error)
   }
  

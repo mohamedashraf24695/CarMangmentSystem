@@ -28,7 +28,6 @@ async function checkCar(plateNo, ownerID) {
       ownerID: ownerID,
     });
 
-    console.log(check_existance_2);
 
     if (!check_existance_person) {
       return -1;
@@ -55,7 +54,6 @@ async function createCar(brand, model, plateNo, ownerID) {
     ownerID: ownerID,
   };
 
-  console.log(result);
 
   if (result === -1) {
     return "The employee is not in the database";
