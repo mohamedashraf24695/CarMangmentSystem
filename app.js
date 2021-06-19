@@ -27,4 +27,5 @@ app.use("/api/person", require("./routes/peopleAPIs"));
 
 app.use("/api/card", require("./routes/cardAPIs"));
 app.use("/api/register", require("./routes/registerAPI"));
-app.use("/api/charging", require("./routes/runningAPIs"));
+app.use("/api/deduct", require("./routes/runningAPIs"));
+app.use("/api/chargeCard", require("./routes/chargingAPIs"));

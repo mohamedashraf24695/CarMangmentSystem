@@ -57,7 +57,6 @@ router.get("/read/all", async (req, res) => {
  * Route : "/api/card/read/:prop/:prop_id"
  * The Prop list : 
  * plateNo 
- * ownerID  
 
  * YOU MUST TYPE THEM AS THEY ARE WRITTEN HERE 
 
@@ -95,6 +94,22 @@ router.patch("/update/:plate_id", async (req, res) => {
 
   try {
     let result = await cardControllers.updateCardNo(plate_id,updatedItem);
+
+     res.json(result)
+  
+  } catch (error) {
+  res.json(error)
+  }
+ 
+})
+
+
+router.delete("/delete/:plate_id", async (req, res) => {
+
+  let plate_id = req.params.plate_id ;
+
+  try {
+    let result = await cardControllers.deleteCard(plate_id);
 
      res.json(result)
   

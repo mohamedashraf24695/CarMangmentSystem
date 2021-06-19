@@ -182,8 +182,64 @@ if(check_existance_plate){
 }
 
 
+async function chargeCredit (plate_no , chargeAmount){
+
+  let check_existance_plate = await Card.exists({
+    plateNo: plate_no,
+  });
+
+  if(check_existance_plate){
+
+    let foundCard = await Card.find({
+      plateNo: plate_no,
+    });
+  
+    let availableBalance = await foundCard[0].availableCredit;
+
+   
+    let chargeAmount_num =  parseInt(chargeAmount);
+
+    if (  isNaN(chargeAmount_num)){
+
+      return {
+        message: "Charge amount is not a number"   
+      };
+    }
 
 
+    let newBalance = await (availableBalance + chargeAmount_num) ;
+    console.log(newBalance);
+
+
+    let updatedCard = await Card.updateOne(
+      { plateNo: plate_no },
+      { $set: { availableCredit: newBalance } }
+    );
+
+    return {
+      message: "Success, Your credit now is " + newBalance + " dollars",
+      credit: newBalance,
+    };
+
+  }else {
+    return {
+      message: "PlateNo is not exist"   
+    };
+
+  }
+
+}
+
+
+
+async function deleteAll(){
+
+  await Card.deleteMany();
+
+  return {message : "The card is deleted successfully" } ;
+
+
+}
 
 
 
@@ -200,4 +256,6 @@ module.exports = {
   chargeTaker :chargeTaker ,
   updateCardNo:updateCardNo,
   deleteCard:deleteCard,
+  chargeCredit:chargeCredit ,
+  deleteAll:deleteAll
 };

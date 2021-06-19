@@ -2,16 +2,36 @@ const express = require("express");
 const router = express.Router();
 const cardControllers = require("../controllers/cardControllers");
 
-router.post("/sim", async (req, res) => {
+router.post("/", async (req, res) => {
   let plateNumber = req.body.plateNo;
 
-  let timeDifference = await cardControllers.timeSinceLastTime(plateNumber);
+  try {
 
-  await cardControllers.assignNewTime(plateNumber);
+    let plate_existance = await cardControllers.checkExistance("plateNo",plateNumber) ; 
 
-  let result = await cardControllers.chargeTaker(plateNumber, timeDifference);
 
-  res.json({ result });
+    if (plate_existance){
+
+      let timeDifference = await cardControllers.timeSinceLastTime(plateNumber);
+
+      await cardControllers.assignNewTime(plateNumber);
+    
+      let result = await cardControllers.chargeTaker(plateNumber, timeDifference);
+    
+      res.json({ result });
+    }else {
+      res.json({  message: "The plate doesn't exist" });
+
+    }
+
+ 
+
+  } catch (error) {
+      res.json({ error });
+
+  }
+
+  
 });
 
 

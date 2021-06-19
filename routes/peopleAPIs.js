@@ -119,31 +119,6 @@ router.patch("/update/:unique_id", async (req, res) => {
   }
 });
 
-router.patch("/update/:unique_id", async (req, res) => {
-  try {
-    let result = await personControllers.checkExistance(
-      "uniqueID",
-      req.params.unique_id
-    );
-
-    if (result) {
-      let updatedPerson = await personControllers.updatePeopleBy(
-        req.body.attribute,
-        req.params.unique_id,
-        req.body.updatedItem
-      );
-
-
-      res
-        .status(200)
-        .json({ message: "The person is updated", result: updatedPerson });
-    } else {
-      res.status(200).json({ message: "The person is not found" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
 
 
 

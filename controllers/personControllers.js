@@ -27,7 +27,7 @@ async function createPerson(name, position, age, uniqueID) {
   };
 
   if (result === true) {
-    return "Peson is exist";
+    return "Person is exist";
   } else if (result === false) {
     await Person.create(newperson);
 

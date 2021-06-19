@@ -3,6 +3,18 @@ const Card = require("../models/Card");
 
 const Person = require("../models/Person");
 const cardControllers = require("../controllers/cardControllers");
+/********************************************************************************************************************************* */
+
+/**************************************************************************************************************
+ * Function name : checkCar (local function)
+ * arguments : plateNo , ownerID
+ * return : integer indicate the car case : 
+ *  1- Car already exist or not 
+ *  2- Owner owns another car or not 
+ *  3- Owner is a real employee 
+ *  4- plate number is unique or not 
+
+ ************************************************************************************************************/
 
 async function checkCar(plateNo, ownerID) {
   try {
@@ -28,7 +40,6 @@ async function checkCar(plateNo, ownerID) {
       ownerID: ownerID,
     });
 
-
     if (!check_existance_person) {
       return -1;
     } else if (full_check_existance) {
@@ -44,6 +55,19 @@ async function checkCar(plateNo, ownerID) {
     return error.message;
   }
 }
+/********************************************************************************************************************************* */
+
+/******************************************************************************************************************
+ * Function name : createCar 
+ * arguments : brand, model, plateNo, ownerID
+ * return : json object with a message String explain the performed operations due to the inputs
+ *  1- "The employee is not in the database"
+ *  2-"Car is exist" 
+ *  3- "Car is exist with other person"
+ *  4-  "The Car is created " 
+ *   ***  and in this case function creates a car and store it in database
+
+ ************************************************************************************************************/
 
 async function createCar(brand, model, plateNo, ownerID) {
   let result = await checkCar(plateNo, ownerID);
@@ -53,7 +77,6 @@ async function createCar(brand, model, plateNo, ownerID) {
     plateNo: plateNo,
     ownerID: ownerID,
   };
-
 
   if (result === -1) {
     return "The employee is not in the database";
@@ -70,11 +93,28 @@ async function createCar(brand, model, plateNo, ownerID) {
     return -400;
   }
 }
+/********************************************************************************************************************************* */
+
+/******************************************************************************************************************
+ * Function name : findAllCars
+ * arguments : no arguments
+ * return : All Car objects in database
+ */
 
 async function findAllCars() {
   let result = await Car.find();
   return result;
 }
+/********************************************************************************************************************************* */
+
+/*******
+ * Function name : checkExistance 
+ * arguments :attribute, value
+ * return : true or false 
+ description: passing the attribute (model ,plateNo , brand or ownerID) and a value of it 
+ if the a car with this value , it will return true , otherwise, it will return false 
+
+ ************************************************************************************************************/
 
 async function checkExistance(attribute, value) {
   let check_existance = false;
@@ -99,6 +139,16 @@ async function checkExistance(attribute, value) {
 
   return check_existance;
 }
+/********************************************************************************************************************************* */
+
+/******************************************************************************************************************
+ * Function name : findCarsBy 
+ * arguments :attribute, value
+ * return : a car object
+ description: passing the attribute (model ,plateNo , brand or ownerID) and a value of it 
+ it will return objects matching 
+
+ ************************************************************************************************************/
 
 async function findCarsBy(attribute, value) {
   let result;
@@ -123,6 +173,20 @@ async function findCarsBy(attribute, value) {
 
   return result;
 }
+/********************************************************************************************************************************* */
+
+/******************************************************************************************************************
+ * Function name : updateCarBy
+ * arguments :attribute, plate_no, update
+ * return : json object with a message String explain the performed operations due to the inputs
+ * 1-Owner is not an employee
+ * 2-Owner own another car
+ * 3-Car's model is updated
+ * 4-Car's brand is updated
+ * 5-"New Plate number is already exist for another can
+ * 6- "Car's plate number is updated and also the corresponding card"
+ * 7 - "Car is not found"
+ ************************************************************************************************************/
 
 async function updateCarBy(attribute, plate_no, update) {
   let check_existance_plate = await Car.exists({
@@ -172,7 +236,6 @@ async function updateCarBy(attribute, plate_no, update) {
         { $set: { brand: update } }
       );
 
-
       return { message: "Car's brand is updated " };
     } else if (attribute === "plateNo") {
       let check_existance_new_plate = await Car.exists({
@@ -191,48 +254,50 @@ async function updateCarBy(attribute, plate_no, update) {
           { $set: { plateNo: update } }
         );
 
-        await cardControllers.updateCardNo(plate_no,update);
+        await cardControllers.updateCardNo(plate_no, update);
 
-        return { message: "Car's plate number is updated and also the corresponding card" };
+        return {
+          message:
+            "Car's plate number is updated and also the corresponding card",
+        };
       }
     }
   } else {
     return { message: "Car is not found" };
   }
 }
+/********************************************************************************************************************************* */
+
+/****************************************************************************************************
+ * Function name : deleteCar
+ * arguments :plate_no
+ * return : json object with a message String explain the performed operations due to the inputs
+ * 1-"The car and its card are deleted successfully"
+ * 2-"The card is not exist "
+ **************************************************************************************************/
 
 
-
-async function deleteCar(plate_no){
-
+async function deleteCar(plate_no) {
   let check_existance_plate = await Car.exists({
     plateNo: plate_no,
   });
 
+  if (check_existance_plate) {
+    await Car.deleteOne({ plateNo: plate_no });
+    await Card.deleteOne({ plateNo: plate_no });
 
-if(check_existance_plate){
-
-  await Car.deleteOne({plateNo: plate_no});
-  await Card.deleteOne({plateNo: plate_no});
-
-  return {message : "The car and its card are deleted successfully" } ;
-
-
-}else if (!check_existance_plate){
-  return {message : "The card is not exist " } ;
-
+    return { message: "The car and its card are deleted successfully" };
+  } else if (!check_existance_plate) {
+    return { message: "The card is not exist " };
+  }
 }
-
-
-}
-
-
-
+/********************************************************************************************************************************* */
 module.exports = {
   createCar: createCar,
   findAllCars: findAllCars,
   checkExistance: checkExistance,
   findCarsBy: findCarsBy,
   updateCarBy: updateCarBy,
-  deleteCar:deleteCar
+  deleteCar: deleteCar,
 };
+/********************************************************************************************************************************* */
