@@ -18,8 +18,9 @@ app.use(express.json());
 app.listen(process.env.PORT || 3000, () => console.log("Server is running"));
 
 app.get("/", (req, res) => {
-  res.send("Hello");
-});
+  res.status(200).json({
+    message: "Welcome to Car Mangement System APIs root",
+  });});
 
 app.use("/api/car", require("./routes/carAPIs"));
 
@@ -29,3 +30,7 @@ app.use("/api/card", require("./routes/cardAPIs"));
 app.use("/api/register", require("./routes/registerAPI"));
 app.use("/api/deduct", require("./routes/runningAPIs"));
 app.use("/api/chargeCard", require("./routes/chargingAPIs"));
+app.use((req,res)=>{
+  res.status(404).json({message : "Not found"});
+
+});
