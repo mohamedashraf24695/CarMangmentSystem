@@ -102,7 +102,6 @@ async function updatePeopleBy(attribute, unique_id, update) {
     );
 
     return { message: "Name is updated" };
-
   } else if (attribute == "position") {
     result = await Person.updateOne(
       {
@@ -112,7 +111,6 @@ async function updatePeopleBy(attribute, unique_id, update) {
     );
 
     return { message: "Position  is updated" };
-
   } else if (attribute == "age") {
     result = await Person.updateOne(
       {
@@ -122,43 +120,54 @@ async function updatePeopleBy(attribute, unique_id, update) {
     );
 
     return { message: "Age  is updated" };
-
   } else if (attribute == "uniqueID") {
     let idExistance = await Person.exists({
       uniqueID: update,
     });
 
-    if (idExistance){
-
+    if (idExistance) {
       return { message: "Unique ID is already exist" };
-
-
-    }else if (!idExistance){
-       await Person.updateOne(
+    } else if (!idExistance) {
+      await Person.updateOne(
         {
           uniqueID: unique_id,
         },
         { $set: { uniqueID: update } }
       );
-  
-      let associatedCar = await carControllers.findCarsBy("ownerID",unique_id) ; 
-      console.log(associatedCar)
-      let plateNumber = await associatedCar[0].plateNo ;
-      console.log("Plate number is "+ plateNumber) ;
-      await carControllers.updateCarBy("ownerID",plateNumber,update) ;
 
-      return { message: "Unique ID is updated and the associated car owner number" };
+      let associatedCar = await carControllers.findCarsBy("ownerID", unique_id);
+      console.log(associatedCar);
+      let plateNumber = await associatedCar[0].plateNo;
+      console.log("Plate number is " + plateNumber);
+      await carControllers.updateCarBy("ownerID", plateNumber, update);
 
+      return {
+        message: "Unique ID is updated and the associated car owner number",
+      };
     }
-
-
-
-   
-
-
   }
 
   console.log(result);
+}
+
+async function deletePerson(unique_id) {
+  let check_existance = await Person.exists({
+    uniqueID: unique_id,
+  });
+
+  if (check_existance) {
+    let associatedCar = await carControllers.findCarsBy("ownerID", unique_id);
+    let plateNumber = await associatedCar[0].plateNo;
+
+    await carControllers.deleteCar(plateNumber);
+    await Person.deleteOne({ uniqueID: unique_id });
+
+    return {
+      message: "The employee , his car and his card are deleted successfully",
+    };
+  } else if (!check_existance) {
+    return { message: "The employee is not exist " };
+  }
 }
 
 module.exports = {
@@ -167,4 +176,5 @@ module.exports = {
   findPeopleBy: findPeopleBy,
   checkExistance: checkExistance,
   updatePeopleBy: updatePeopleBy,
+  deletePerson:deletePerson
 };

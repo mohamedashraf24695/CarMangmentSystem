@@ -3,8 +3,6 @@ const router = express.Router();
 const carControllers = require("../controllers/carControllers");
 /******************************************************************************* */
 
-
-
 /***************************************************************************
  * 1- Create a new car to the database
  * Method: POST
@@ -15,7 +13,6 @@ const carControllers = require("../controllers/carControllers");
  *     - plateNo : type : Number , required
  *     - ownerID : type : Number , required
  **************************************************************************/
-
 
 router.post("/create", async (req, res) => {
   let brand = req.body.brand;
@@ -37,7 +34,6 @@ router.post("/create", async (req, res) => {
 });
 /******************************************************************************* */
 
-
 /***************************************************************************
  * 2- Read all cars in the database
  * Method: GET
@@ -54,7 +50,6 @@ router.get("/read/all", async (req, res) => {
   }
 });
 /******************************************************************************* */
-
 
 /***************************************************************************
  * 3- Read all cars with a certain property
@@ -74,16 +69,14 @@ router.get("/read/:prop/:prop_id", async (req, res) => {
     let result = await carControllers.checkExistance(
       req.params.prop,
       req.params.prop_id
-    ); 
+    );
 
     if (result) {
-
       let foundCars = await carControllers.findCarsBy(
         req.params.prop,
         req.params.prop_id
-      )
-      res.status(200).json({ message: "The Car is exist" ,
-                              result : foundCars });
+      );
+      res.status(200).json({ message: "The Car is exist", result: foundCars });
     } else {
       res.status(200).json({ message: "The Car is not found" });
     }
@@ -92,30 +85,43 @@ router.get("/read/:prop/:prop_id", async (req, res) => {
   }
 });
 
-
-
-
 router.patch("/update/:plate_id", async (req, res) => {
+  let plate_id = req.params.plate_id;
+  let attribute = req.body.attribute;
+  let updatedItem = req.body.updatedItem;
 
-let plate_id = req.params.plate_id ;
-let attribute = req.body.attribute ;
-let updatedItem = req.body.updatedItem;
+  try {
+    let result = await carControllers.updateCarBy(
+      attribute,
+      plate_id,
+      updatedItem
+    );
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+});
 
-try {
-  let result = await carControllers.updateCarBy(attribute,plate_id,updatedItem) ;
-   console.log(result);
-   res.json(result)
+
+
+router.delete("/delete/:plate_id", async (req, res) => {
+
+  let plate_id = req.params.plate_id ;
+
+  try {
+    let result = await carControllers.deleteCar(plate_id);
+
+    console.log(result);
+     res.json(result)
   
-} catch (error) {
-  console.log(error);
+  } catch (error) {
+    console.log(error);
   res.json(error)
-
-}
-
-
-
-  });
-
+  }
+ 
+})
 
 
 

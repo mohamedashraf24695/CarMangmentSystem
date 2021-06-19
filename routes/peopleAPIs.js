@@ -149,4 +149,35 @@ router.patch("/update/:unique_id", async (req, res) => {
   }
 });
 
+
+
+router.delete("/delete/:unique_id", async (req, res) => {
+
+  let unique_id = req.params.unique_id ;
+
+  try {
+    let result = await personControllers.deletePerson(unique_id);
+
+    console.log(result);
+     res.json(result)
+  
+  } catch (error) {
+    console.log(error);
+  res.json(error)
+  }
+ 
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;

@@ -159,6 +159,32 @@ if (check_existance_plate && !check_existance_new){
 
 
 
+async function deleteCard(plate_no){
+
+  let check_existance_plate = await Card.exists({
+    plateNo: plate_no,
+  });
+
+
+if(check_existance_plate){
+
+  await Card.deleteOne({plateNo: plate_no});
+
+  return {message : "The card is deleted successfully" } ;
+
+
+}else if (!check_existance_plate){
+  return {message : "The card is not exist " } ;
+
+}
+
+
+}
+
+
+
+
+
 
 
 
@@ -172,5 +198,6 @@ module.exports = {
   timeSinceLastTime: timeSinceLastTime,
   assignNewTime: assignNewTime,
   chargeTaker :chargeTaker ,
-  updateCardNo:updateCardNo
+  updateCardNo:updateCardNo,
+  deleteCard:deleteCard,
 };

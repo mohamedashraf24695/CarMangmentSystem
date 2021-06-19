@@ -1,4 +1,6 @@
 const Car = require("../models/Car");
+const Card = require("../models/Card");
+
 const Person = require("../models/Person");
 const cardControllers = require("../controllers/cardControllers");
 
@@ -201,10 +203,38 @@ async function updateCarBy(attribute, plate_no, update) {
   }
 }
 
+
+
+async function deleteCar(plate_no){
+
+  let check_existance_plate = await Car.exists({
+    plateNo: plate_no,
+  });
+
+
+if(check_existance_plate){
+
+  await Car.deleteOne({plateNo: plate_no});
+  await Card.deleteOne({plateNo: plate_no});
+
+  return {message : "The car and its card are deleted successfully" } ;
+
+
+}else if (!check_existance_plate){
+  return {message : "The card is not exist " } ;
+
+}
+
+
+}
+
+
+
 module.exports = {
   createCar: createCar,
   findAllCars: findAllCars,
   checkExistance: checkExistance,
   findCarsBy: findCarsBy,
   updateCarBy: updateCarBy,
+  deleteCar:deleteCar
 };

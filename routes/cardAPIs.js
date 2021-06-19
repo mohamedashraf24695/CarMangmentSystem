@@ -108,6 +108,27 @@ router.patch("/update/:plate_id", async (req, res) => {
 })
 
 
+router.delete("/delete/:plate_id", async (req, res) => {
+
+  let plate_id = req.params.plate_id ;
+
+  try {
+    let result = await cardControllers.deleteCard(plate_id);
+
+    console.log(result);
+     res.json(result)
+  
+  } catch (error) {
+    console.log(error);
+  res.json(error)
+  }
+ 
+})
+
+
+
+
+
 
 
 module.exports = router;
