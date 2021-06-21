@@ -4,8 +4,8 @@
 
 <img src="https://github.com/mohamedashraf24695/CarMangmentSystem/blob/master/ERD.png">
 
-**One employee can only have one car with only one card**
-**I tried to cover all edge cases for all scenarios **
+1) **One employee can only have one car with only one card**
+2) **I tried to cover all edge cases for all scenarios**
 
 
 ## CRUD Operations on the database:
