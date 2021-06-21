@@ -5,6 +5,8 @@
 <img src="https://github.com/mohamedashraf24695/CarMangmentSystem/blob/master/ERD.png">
 
 **One employee can only have one car with only one card**
+**I tried to cover all edge cases for all scenarios **
+
 
 ## CRUD Operations on the database:
 
@@ -228,6 +230,17 @@ return {
 3)	Run command : “npm run start” to start the server 
 4)	Use Postman to run the requests 
 
+
+## How to use it as service
+
+1) use create employee api to create employees in your database 
+2) use car api to create cars and card api to create cards 
+or 
+2) use register api to create both of them by such one api 
+3) use dedcut api to perfom duduct actions on cards 
+4) use charging api to charge the cards 
+
+YOU MUST HAVE EMPLOYEE IN YOUR DATA BASE 
 
 
 
