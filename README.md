@@ -5,7 +5,9 @@
 <img src="https://github.com/mohamedashraf24695/CarMangmentSystem/blob/master/ERD.png">
 
 1) **One employee can only have one car with only one card**
-2) **I tried to cover all edge cases for all scenarios**
+2) I assumed that the card number will be unique and also the plate number should be unique, so we can use plate number on cards as its own number. By that we made the plate number as a primary key for the cards and a part of a composite key for cars.
+3) **I tried to cover all edge cases for all scenarios**
+
 
 
 ## CRUD Operations on the database:
